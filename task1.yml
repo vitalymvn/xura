@@ -4,6 +4,7 @@
     become: yes
     become_method: sudo
     yum: name=git state=latest
+    #Some edits.
   - name: Clone Pet-Clinic
     git: repo=https://github.com/vitalymvn/spring-petclinic.git dest=~/devops-course/spring
     git: repo=https://github.com/vitalymvn/xura.git dest=~/devops-course/xura
