@@ -1,0 +1,13 @@
+- hosts: localhost
+  tasks:
+  - name: Instal Git
+    become: yes
+    become_method: sudo
+    yum: name=git state=latest
+  - name: Install Docker
+    become: yes
+    become_method: sudo
+    yum: name=docker state=latest
+  - name: Clone Pet-Clinic and xura
+    git: repo=https://github.com/vitalymvn/spring-petclinic.git dest=~/devops-course/spring
+    git: repo=https://github.com/vitalymvn/xura.git dest=~/devops-course/xura
