@@ -1,0 +1,6 @@
+docker pull jfrog-docker-reg2.bintray.io/jfrog/artifactory-oss
+
+docker inspect jfrog-docker-reg2.bintray.io/jfrog/artifactory-oss
+
+
+docker run -d -p 8090:8081 jfrog-docker-reg2.bintray.io/jfrog/artifactory-oss
