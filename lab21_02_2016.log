@@ -1,0 +1,47 @@
+[ec2-user@ip-172-31-3-69 timage]$ ls -ltr
+total 28728
+-rw-rw-r-- 1 ec2-user ec2-user 29400824 Feb 21 08:45 petclinic.war
+-rw-rw-r-- 1 ec2-user ec2-user      252 Feb 21 08:46 Dockerfile
+-rw-rw-r-- 1 ec2-user ec2-user      139 Feb 21 09:08 taskimage.yml
+drwxrwxr-x 2 ec2-user ec2-user     4096 Feb 21 09:24 images
+-rw-rw-r-- 1 ec2-user ec2-user      317 Feb 21 09:53 build.yml
+[ec2-user@ip-172-31-3-69 timage]$
+[ec2-user@ip-172-31-3-69 timage]$
+[ec2-user@ip-172-31-3-69 timage]$
+[ec2-user@ip-172-31-3-69 timage]$
+[ec2-user@ip-172-31-3-69 timage]$ cat Dockerfile
+# INSTRUCTION PARAMETERS
+FROM centos:latest
+MAINTAINER shimib
+
+ENV NAME whatever
+
+
+RUN yum -y install java-1.8.0-openjdk-devel
+RUN yum -y install tomcat
+RUN mkdir /logs
+CMD tomcat start && tail -f /logs/catalina.out
+ADD *.war /usr/share/tomcat/webapps
+[ec2-user@ip-172-31-3-69 timage]$
+[ec2-user@ip-172-31-3-69 timage]$
+[ec2-user@ip-172-31-3-69 timage]$ cat taskimage.yml
+- hosts: localhost
+  tasks:
+    - name: build image
+      docker_image: path="/home/ec2-user/timage/images" name="tomcatimage" state=build
+[ec2-user@ip-172-31-3-69 timage]$
+[ec2-user@ip-172-31-3-69 timage]$
+[ec2-user@ip-172-31-3-69 timage]$ cat build.yml
+- hosts: localhost
+  tasks:
+    - name: build image
+      docker_image: path="/home/ec2-user/timage/images" name="tomcatimage" state=build
+    - name: run image
+      docker:
+        name: mytomcat1
+        image: tomcatimage
+        state: started
+        expose:
+        - 8080
+        ports:
+        - "9090:8080"
